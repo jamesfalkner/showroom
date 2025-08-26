@@ -1,31 +1,280 @@
 :imagesdir: ../assets/images
 
-= Platform Engineering Workshop
+= Showroom AI Assistant - Proof of Concept
 
-== Introduction
-Organizations often struggle with a variety of circumstances that can impact productivity within the teams (high cognitive load, lack of standardization, domain knowledge fragmentation). +
-This could result in inefficient or reduced Productivity, higher maintenance costs and/or security vulnerabilities.
+== Overview
 
-Red Hat provides the tools and know-how to help "The Providers" (The Platform Engineers) to create "The Product" (their custom IDP) based on the needs of "The Customers" (all Development Teams within the organization).
+This is a proof of concept demonstrating how to add AI capabilities to *any* Showroom repository. While this example uses the Platform Engineering Workshop as the base showroom, the AI assistant components can be integrated into any existing Showroom-based training material.
 
+The AI assistant provides:
 
-This workshop is meant for Platform Engineers who are in charge of 
+* **RAG (Retrieval-Augmented Generation)** ingestion of Showroom AsciiDoc content
+* **PDF documentation ingestion** with intelligent chunking
+* **Configurable LLM backends** (local or remote)
+* **MCP (Model Context Protocol) server integration** for live system interaction
+* **Contextual responses** based on current workshop page
+* **Comprehensive debug logging** for transparency
 
-* creating standard technologies that can be used in all environments (Development, Testing, Production), and
-* defining processes and ensuring they are maximizing the time and resources for Development Teams.
+== Key Features
 
-Development Teams who are in charge of creating a software solution and empower (traditionally speaking) in picking their own tools for coding, building, deploying, running, monitoring and documentation may also benefit from this.
+=== 1. Showroom Content Ingestion
+The system automatically ingests all AsciiDoc files from the `content/modules/ROOT/pages/` directory, cleaning markup and creating a searchable knowledge base from your existing workshop materials.
 
-== *What you will  learn:*
+=== 2. PDF Documentation Support
+Enhanced with PDF ingestion capabilities for technical documentation. Place PDF files in `content/modules/ROOT/assets/techdocs/` and they'll be automatically processed and chunked for optimal retrieval.
 
-* Understand the need to implement Platform Engineering disciplines in their organization and see the clear benefits of improving the Developer Productivity
-* How to design a Thinnest Viable Platform (TVP) based on the needs of ALL development teams in the organization and ensure they are highly productive as possible
-* Constantly assessing the investment into their own IDP and understand how they can enhance and convince ALL development teams to start adopting
-* See how Red Hat can help as a partner in your Platform Engineering journey
+=== 3. Flexible LLM Configuration
+Configure any OpenAI-compatible API endpoint:
+* OpenAI GPT models
+* Local models via Ollama, LM Studio, etc.
+* Azure OpenAI
+* Other compatible services
 
+=== 4. Live System Integration
+Optional MCP servers provide real-time interaction capabilities:
+* **Kubernetes MCP Server**: Query and interact with Kubernetes clusters
+* **GitLab MCP Server**: Access GitLab repositories and projects
+* **Extensible**: Add custom MCP servers for your specific tools
 
-== Instructions
+== Custom Files for AI Integration
 
-Preview the instructions here: https://redhat-pe-workshop.github.io/showroom/
+This proof of concept adds several custom files to a standard Showroom repository:
 
-And here is a single page version of the set of instructions: https://redhat-pe-workshop.github.io/showroom/modules/singlepage.html
+=== Backend Application
+* `backend/app.py` - FastAPI application with embedded RAG engine
+* `backend/requirements.txt` - Python dependencies
+* `.env.yaml` - Configuration file for API keys (gitignored)
+
+=== Container Definitions
+* `Dockerfile.showroom` - Main backend container
+* `Dockerfile.mcp` - Kubernetes MCP server container
+* `Dockerfile.gitlab-mcp` - GitLab MCP server container
+
+=== Deployment Infrastructure
+* `k8s-backend/` - Kubernetes manifests for backend service
+* `k8s-mcp-server/` - Kubernetes manifests for MCP server
+* `k8s-gitlab-mcp-server/` - Kubernetes manifests for GitLab MCP server
+* `deploy.sh` - Automated OpenShift deployment script
+
+=== Enhanced UI Components
+* `content/modules/ROOT/pages/workshop-layout.adoc` - Gives additional workshop-specific guidance for a specific workshop architecture or things that aren't like an ordinary product install.
+* `content/modules/ROOT/pages/style.adoc` - Enhanced CSS and embedded chatbot JavaScript
+* `content/supplemental-ui/` - Additional UI assets
+
+=== Documentation Assets
+* `content/modules/ROOT/assets/techdocs/*.pdf` - Technical documentation PDFs for ingestion (e.g. for product documentation)
+
+== Getting Started
+
+=== Prerequisites
+
+1. **Container Runtime**: Docker or Podman
+2. **Node.js**: For building static content with Antora
+3. **LLM API Access**: OpenAI API key or local LLM setup
+
+=== Quick Start (Local Development)
+
+1. **Clone and Configure**
++
+[source,bash]
+----
+git clone <your-showroom-repo>
+cd <your-showroom-repo>
+
+# Copy the example configuration
+cp .env.yaml.example .env.yaml
+# Edit .env.yaml with your API keys
+----
+
+2. **Build Static Content**
++
+[source,bash]
+----
+npm install
+npx antora default-site.yml
+----
+
+3. **Run with Container**
++
+[source,bash]
+----
+# Build and run the backend
+podman build -f Dockerfile.showroom -t workshop-backend:local .
+
+# Extract API key and run
+API_KEY=$(grep "^llm_api_key:" .env.yaml | cut -d'"' -f2)
+podman run -d -p 8080:8080 -e LLM_API_KEY="$API_KEY" --name workshop-backend workshop-backend:local
+----
+
+4. **Access the Assistant**
++
+Open http://localhost:8080 to see your workshop with the integrated AI assistant.
+
+=== Production Deployment (OpenShift)
+
+For production deployment on OpenShift:
+
+[source,bash]
+----
+# Ensure you're logged into OpenShift
+oc login
+
+# Deploy all services
+./deploy.sh
+
+# Or deploy components individually
+./deploy.sh backend  # Backend only
+./deploy.sh mcp      # MCP servers only
+----
+
+== Adding to Your Showroom Repository
+
+To integrate this AI assistant into your existing Showroom repository:
+
+=== 1. Copy Core Files
+Copy these essential files to your repository:
+* `backend/` directory (complete)
+* `Dockerfile.showroom`
+* `.env.yaml` (for configuration)
+
+=== 2. Enhance Your Content
+* Add/Update the workshop layout: `content/modules/ROOT/pages/workshop-layout.adoc`
+* Update styles: merge changes from `content/modules/ROOT/pages/style.adoc`
+* Optionally add PDF documentation to `content/modules/ROOT/assets/techdocs/`
+
+=== 3. Configure for Your Content
+* Update `content/modules/ROOT/pages/workshop-layout.adoc` with your workshop title
+* Modify the system prompt in `k8s-backend/configmap.yaml` to reflect your domain
+* Add any domain-specific PDF documentation
+
+=== 4. Deploy
+Use the provided deployment scripts or adapt them for your infrastructure.
+
+== LLM Configuration Options
+
+=== OpenAI (Default)
+[source,yaml]
+----
+llm_api_key: "sk-..."
+# Uses https://api.openai.com/v1/chat/completions by default
+----
+
+=== Local LLM (Ollama)
+[source,bash]
+----
+# Run Ollama locally
+ollama serve
+ollama pull llama2
+
+# Configure in container
+-e LLM_API_URL="http://host.docker.internal:11434/v1/chat/completions"
+-e LLM_MODEL="llama2"
+-e LLM_API_KEY="dummy"
+----
+
+=== Azure OpenAI
+[source,bash]
+----
+-e LLM_API_URL="https://your-resource.openai.azure.com/openai/deployments/your-model/chat/completions?api-version=2023-05-15"
+-e LLM_API_KEY="your-azure-key"
+----
+
+== MCP Server Extensions
+
+The system supports multiple MCP servers for different integrations:
+
+=== Included Servers
+* **Kubernetes MCP**: Interact with Kubernetes clusters
+* **GitLab MCP**: Access GitLab repositories and projects
+
+=== Adding Custom MCP Servers
+
+To add a new MCP server:
+
+1. **Create Kubernetes Manifests**
++
+Create a new directory `k8s-your-mcp-server/` with:
+* `deployment.yaml` - Deployment configuration
+* `service.yaml` - Service definition
+* `configmap.yaml` - Configuration (if needed)
+
+2. **Update Deployment Script**
++
+Add functions to `deploy.sh`:
++
+[source,bash]
+----
+# Add to deploy.sh
+create_your_mcp_buildconfig() {
+    # BuildConfig creation logic
+}
+
+build_your_mcp() {
+    # Build logic
+}
+
+deploy_your_mcp() {
+    # Deployment logic
+}
+----
+
+3. **Configure Backend**
++
+Update the MCP configuration in `k8s-backend/configmap.yaml`:
++
+[source,yaml]
+----
+MCP_CONFIG: |
+  mcpServers:
+    your_server:
+      command: "npx"
+      args: ["your-mcp-server"]
+      env:
+        YOUR_CONFIG: "value"
+----
+
+== Debug and Monitoring
+
+The system includes comprehensive logging for transparency:
+
+* **Content Ingestion**: See which files are processed and how
+* **Retrieval Debugging**: View exact content snippets used for responses
+* **Similarity Scoring**: Monitor RAG performance metrics
+* **MCP Tool Usage**: Track external tool interactions
+
+Set `LOG_LEVEL=DEBUG` for detailed output.
+
+== Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Showroom      │    │   Backend       │    │   MCP Servers   │
+│   (Static)      │◄───┤   (FastAPI)     │◄───┤   (Optional)    │
+│                 │    │                 │    │                 │
+│ - AsciiDoc      │    │ - RAG Engine    │    │ - Kubernetes    │
+│ - Workshop      │    │ - LLM Client    │    │ - GitLab        │
+│ - AI Assistant  │    │ - PDF Ingestion │    │ - Custom...     │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+```
+
+== Example Showroom: Platform Engineering Workshop
+
+This proof of concept is demonstrated using the Platform Engineering Workshop, which focuses on:
+
+* Understanding Platform Engineering disciplines
+* Designing Thinnest Viable Platforms (TVP)
+* Red Hat Developer Hub implementation
+* GitOps workflows with ArgoCD
+
+The AI assistant enhances this workshop by providing contextual guidance, answering questions about Red Hat Developer Hub, and helping with troubleshooting.
+
+== Contributing
+
+This is a proof of concept demonstrating the integration pattern. To contribute:
+
+1. Fork the repository
+2. Create your feature branch
+3. Test with your own Showroom content
+4. Submit a pull request with improvements
+
+The goal is to make this pattern reusable across any Showroom-based training content.

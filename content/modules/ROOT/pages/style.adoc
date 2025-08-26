@@ -17,6 +17,1228 @@ summary  {
     cursor: pointer;
 }
 
+/* Workshop AI Chatbot Styles */
+
+/* Floating toggle button */
+.chatbot-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--rem-font-family-base, 'Red Hat Text', sans-serif);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.chatbot-toggle:hover {
+  background: #0052a3;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.chatbot-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.chatbot-badge {
+  white-space: nowrap;
+}
+
+/* Chat window */
+.chatbot-window {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 380px;
+  height: 500px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  display: none;
+  flex-direction: column;
+  font-family: var(--rem-font-family-base, 'Red Hat Text', sans-serif);
+  border: 1px solid #e1e5e9;
+}
+
+@media (max-width: 768px) {
+  .chatbot-window {
+    width: calc(100vw - 40px);
+    height: calc(100vh - 120px);
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+  }
+}
+
+/* Header */
+.chatbot-header {
+  background: #0066cc;
+  color: white;
+  padding: 16px;
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatbot-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.chatbot-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.chatbot-btn-icon {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s ease;
+}
+
+.chatbot-btn-icon:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Settings panel */
+.chatbot-settings-panel {
+  display: none;
+  background: #f8f9fa;
+  border-bottom: 1px solid #e1e5e9;
+  padding: 16px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.chatbot-settings-panel h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.setting-group {
+  margin-bottom: 12px;
+}
+
+.setting-group label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.setting-group input,
+.setting-group select {
+  width: 100%;
+  padding: 6px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: inherit;
+}
+
+.setting-group small {
+  display: block;
+  color: #888;
+  font-size: 11px;
+  margin-top: 2px;
+}
+
+/* Messages area */
+.chatbot-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  max-width: 85%;
+}
+
+.user-message {
+  align-self: flex-end;
+}
+
+.bot-message {
+  align-self: flex-start;
+}
+
+.message-content {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.user-message .message-content {
+  background: #0066cc;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.bot-message .message-content {
+  background: #f1f3f5;
+  color: #333;
+  border-bottom-left-radius: 4px;
+}
+
+.error-message .message-content {
+  background: #fee;
+  color: #c33;
+  border: 1px solid #fcc;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #888;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+.user-message .message-time {
+  text-align: right;
+}
+
+.bot-message .message-time {
+  text-align: left;
+}
+
+/* Message content formatting */
+.message-content strong {
+  font-weight: 600;
+}
+
+.message-content em {
+  font-style: italic;
+}
+
+.message-content code {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+  font-size: 13px;
+}
+
+.message-content ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.message-content li {
+  margin: 4px 0;
+}
+
+/* Input area */
+.chatbot-input-container {
+  padding: 16px;
+  border-top: 1px solid #e1e5e9;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+#chatbot-input {
+  flex: 1;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+#chatbot-input:focus {
+  border-color: #0066cc;
+}
+
+.chatbot-btn {
+  background: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.chatbot-btn:hover:not(:disabled) {
+  background: #0052a3;
+}
+
+.chatbot-btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+/* Status bar */
+.chatbot-status {
+  padding: 8px 16px;
+  font-size: 12px;
+  border-top: 1px solid #e1e5e9;
+  background: #f8f9fa;
+  color: #666;
+  min-height: 16px;
+}
+
+.chatbot-status.thinking {
+  color: #0066cc;
+}
+
+.chatbot-status.success {
+  color: #28a745;
+}
+
+.chatbot-status.error {
+  color: #dc3545;
+}
+
+/* Scrollbar styling */
+.chatbot-messages::-webkit-scrollbar,
+.chatbot-settings-panel::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chatbot-messages::-webkit-scrollbar-track,
+.chatbot-settings-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb,
+.chatbot-settings-panel::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 2px;
+}
+
+.chatbot-messages::-webkit-scrollbar-thumb:hover,
+.chatbot-settings-panel::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* Animation for thinking indicator */
+.chatbot-status.thinking::after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #0066cc;
+  margin-left: 8px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Ensure chatbot doesn't interfere with existing content */
+.chatbot-toggle,
+.chatbot-window {
+  font-family: var(--rem-font-family-base, 'Red Hat Text', sans-serif) !important;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .chatbot-toggle {
+    border: 2px solid white;
+  }
+  
+  .message-content {
+    border: 1px solid #333;
+  }
+  
+  .bot-message .message-content {
+    background: white;
+    color: black;
+  }
+}
 </style>
+
+<script>
+// Include the entire chatbot JavaScript inline
+/**
+ * Workshop AI Chatbot
+ * Configurable OpenAI-compatible endpoint support
+ */
+
+class WorkshopChatbot {
+  constructor() {
+    this.isOpen = false;
+    this.workshopContent = null;
+    this.chatHistory = [];
+    this.config = {
+      // MCP Server configuration - backend handles API keys and endpoints
+      mcpEnabled: true,  // Enable MCP by default since backend handles it
+      mcpNamespace: 'default' // Default Kubernetes namespace
+    };
+    
+    this.init();
+  }
+
+  async init() {
+    await this.loadWorkshopContent();
+    this.createChatbotUI();
+    this.bindEvents();
+  }
+
+  async loadWorkshopContent() {
+    // Workshop content is now handled by the backend RAG system
+    // Frontend only needs basic metadata for UI display
+    console.log('Using fallback content - workshop content handled by backend RAG');
+    this.workshopContent = this.getFallbackContent();
+  }
+
+  getFallbackContent() {
+    return {
+      metadata: {
+        title: "Platform Engineering Workshop",
+        focus: "Red Hat Developer Hub, Internal Developer Platforms",
+        modules: 6
+      },
+      modules: {
+        "current": {
+          title: document.querySelector('h1')?.textContent || "Current Page",
+          content: document.querySelector('.doc')?.textContent || "No content available"
+        }
+      }
+    };
+  }
+
+  createChatbotUI() {
+    // Create chatbot container
+    const chatbotContainer = document.createElement('div');
+    chatbotContainer.id = 'workshop-chatbot';
+    chatbotContainer.innerHTML = '' +
+      '<!-- Floating chat button -->' +
+      '<div id="chatbot-toggle" class="chatbot-toggle">' +
+        '<svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">' +
+          '<path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/>' +
+        '</svg>' +
+        '<span class="chatbot-badge">AI Assistant</span>' +
+      '</div>' +
+      '<!-- Chat window -->' +
+      '<div id="chatbot-window" class="chatbot-window">' +
+        '<div class="chatbot-header">' +
+          '<h3>Workshop AI Assistant</h3>' +
+          '<div class="chatbot-controls">' +
+            '<button id="chatbot-settings" class="chatbot-btn-icon" title="Settings">⚙️</button>' +
+            '<button id="chatbot-close" class="chatbot-btn-icon" title="Close">✕</button>' +
+          '</div>' +
+        '</div>' +
+        '<!-- Settings panel -->' +
+        '<div id="chatbot-settings-panel" class="chatbot-settings-panel">' +
+          '<h4>AI Configuration</h4>' +
+          '<div class="setting-group">' +
+            '<p><strong>Backend Service</strong></p>' +
+            '<small>API keys and model configuration are managed server-side for security.</small>' +
+          '</div>' +
+          '<h4 style="margin-top: 16px; border-top: 1px solid #e1e5e9; padding-top: 16px;">Kubernetes Integration (MCP)</h4>' +
+          '<div class="setting-group">' +
+            '<label for="mcp-enabled">' +
+              '<input type="checkbox" id="mcp-enabled" style="margin-right: 8px;">' +
+              'Enable Kubernetes operations' +
+            '</label>' +
+          '</div>' +
+          '<div id="mcp-settings-group" style="display: block;">' +
+            '<div class="setting-group">' +
+              '<label for="mcp-namespace">Default Namespace:</label>' +
+              '<input type="text" id="mcp-namespace" value="default" placeholder="default">' +
+              '<small>Kubernetes namespace for operations</small>' +
+            '</div>' +
+            '<small style="color: #666; font-style: italic;">Note: MCP server connection is handled by the backend</small>' +
+          '</div>' +
+          '<button id="save-settings" class="chatbot-btn">Save Settings</button>' +
+        '</div>' +
+        '<div class="chatbot-messages" id="chatbot-messages">' +
+          '<div class="message bot-message">' +
+            '<div class="message-content">' +
+              '👋 Hi! I\'m your Platform Engineering Workshop assistant. I know all about the workshop content and can help you with:' +
+              '<ul>' +
+                '<li>Questions about Red Hat Developer Hub</li>' +
+                '<li>Platform Engineering concepts</li>' +
+                '<li>Workshop activities and steps</li>' +
+                '<li>Troubleshooting guidance</li>' +
+              '</ul>' +
+              '<em>Configure your AI endpoint in settings (⚙️) to get started!</em>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="chatbot-input-container">' +
+          '<textarea id="chatbot-input" placeholder="Ask me about the workshop..." rows="2"></textarea>' +
+          '<button id="chatbot-send" class="chatbot-btn" disabled>Send</button>' +
+        '</div>' +
+        '<div class="chatbot-status" id="chatbot-status"></div>' +
+      '</div>';
+
+    document.body.appendChild(chatbotContainer);
+  }
+
+  bindEvents() {
+    // Helper function to safely bind events
+    const safeBindEvent = (id, event, handler) => {
+      const element = document.getElementById(id);
+      if (element) {
+        element.addEventListener(event, handler);
+      } else {
+        console.warn(`Element with ID '${id}' not found, skipping event binding`);
+      }
+    };
+
+    // Toggle chat window
+    safeBindEvent('chatbot-toggle', 'click', () => {
+      this.toggleChat();
+    });
+
+    // Close chat
+    safeBindEvent('chatbot-close', 'click', () => {
+      this.closeChat();
+    });
+
+    // Settings toggle
+    safeBindEvent('chatbot-settings', 'click', () => {
+      this.toggleSettings();
+    });
+
+    // MCP enabled toggle
+    safeBindEvent('mcp-enabled', 'change', (e) => {
+      const mcpGroup = document.getElementById('mcp-settings-group');
+      if (mcpGroup) {
+        mcpGroup.style.display = e.target.checked ? 'block' : 'none';
+      }
+    });
+
+    // Save settings
+    safeBindEvent('save-settings', 'click', () => {
+      this.saveSettings();
+    });
+
+    // Send message
+    safeBindEvent('chatbot-send', 'click', () => {
+      this.sendMessage();
+    });
+
+    // Enter key to send
+    safeBindEvent('chatbot-input', 'keydown', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        this.sendMessage();
+      }
+    });
+
+    // Enable send button when there's text
+    safeBindEvent('chatbot-input', 'input', (e) => {
+      const sendBtn = document.getElementById('chatbot-send');
+      if (sendBtn) {
+        sendBtn.disabled = !e.target.value.trim();
+      }
+    });
+
+    // Load saved settings
+    this.loadSettings();
+  }
+
+  toggleChat() {
+    const window = document.getElementById('chatbot-window');
+    this.isOpen = !this.isOpen;
+    window.style.display = this.isOpen ? 'flex' : 'none';
+  }
+
+  closeChat() {
+    this.isOpen = false;
+    document.getElementById('chatbot-window').style.display = 'none';
+  }
+
+  toggleSettings() {
+    const panel = document.getElementById('chatbot-settings-panel');
+    const isVisible = panel.style.display === 'block';
+    panel.style.display = isVisible ? 'none' : 'block';
+  }
+
+  saveSettings() {
+    console.log('saveSettings called');
+    
+    // MCP settings
+    const mcpEnabledEl = document.getElementById('mcp-enabled');
+    const mcpNamespaceEl = document.getElementById('mcp-namespace');
+    
+    if (!mcpEnabledEl || !mcpNamespaceEl) {
+      console.error('Required settings elements not found');
+      this.setStatus('Error: Settings form elements not found', 'error');
+      return;
+    }
+    
+    const mcpEnabled = mcpEnabledEl.checked;
+    const mcpNamespace = mcpNamespaceEl.value;
+
+    this.config = {
+      ...this.config,
+      mcpEnabled: mcpEnabled,
+      mcpNamespace: mcpNamespace || 'default'
+    };
+
+    // Save to localStorage
+    localStorage.setItem('chatbot-config', JSON.stringify(this.config));
+    console.log('Settings saved:', this.config);
+
+    // Update send button state
+    const sendBtn = document.getElementById('chatbot-send');
+    if (sendBtn) {
+      sendBtn.disabled = false;
+    }
+    
+    this.setStatus('Settings saved! Ready to chat.', 'success');
+    this.toggleSettings();
+  }
+
+  loadSettings() {
+    const saved = localStorage.getItem('chatbot-config');
+    if (saved) {
+      const savedConfig = JSON.parse(saved);
+      // Clean up old config properties
+      delete savedConfig.temperature;
+      delete savedConfig.apiKey;
+      delete savedConfig.apiEndpoint;
+      delete savedConfig.model;
+      delete savedConfig.mcpEndpoint;
+      
+      this.config = { ...this.config, ...savedConfig };
+      
+      // Update MCP settings UI
+      document.getElementById('mcp-enabled').checked = this.config.mcpEnabled || false;
+      document.getElementById('mcp-namespace').value = this.config.mcpNamespace || 'default';
+      
+      // Show/hide MCP settings group
+      const mcpGroup = document.getElementById('mcp-settings-group');
+      mcpGroup.style.display = this.config.mcpEnabled ? 'block' : 'none';
+
+      document.getElementById('chatbot-send').disabled = false;
+    }
+  }
+
+  getCurrentPageContext() {
+    // Try to get page context from multiple sources
+    let pageContext = null;
+    let contextDescription = null;
+    
+    // 1. Try to get from first h2 element (most specific section content)
+    const h2 = document.querySelector('h2');
+    if (h2 && h2.textContent) {
+      pageContext = h2.textContent.trim();
+      
+      // Look for the first paragraph after the h2 for additional context
+      let nextElement = h2.nextElementSibling;
+      while (nextElement) {
+        if (nextElement.tagName === 'P' && nextElement.textContent.trim()) {
+          contextDescription = nextElement.textContent.trim();
+          break;
+        }
+        // Also check for paragraphs within divs/sections after h2
+        if (nextElement.tagName === 'DIV' || nextElement.tagName === 'SECTION') {
+          const firstParagraph = nextElement.querySelector('p');
+          if (firstParagraph && firstParagraph.textContent.trim()) {
+            contextDescription = firstParagraph.textContent.trim();
+            break;
+          }
+        }
+        nextElement = nextElement.nextElementSibling;
+      }
+    }
+    
+    // 2. Try to get from main heading (h1) if no h2
+    if (!pageContext) {
+      const h1 = document.querySelector('h1');
+      if (h1 && h1.textContent) {
+        pageContext = h1.textContent.trim();
+        
+        // Look for first paragraph after h1
+        let nextElement = h1.nextElementSibling;
+        while (nextElement) {
+          if (nextElement.tagName === 'P' && nextElement.textContent.trim()) {
+            contextDescription = nextElement.textContent.trim();
+            break;
+          }
+          if (nextElement.tagName === 'DIV' || nextElement.tagName === 'SECTION') {
+            const firstParagraph = nextElement.querySelector('p');
+            if (firstParagraph && firstParagraph.textContent.trim()) {
+              contextDescription = firstParagraph.textContent.trim();
+              break;
+            }
+          }
+          nextElement = nextElement.nextElementSibling;
+        }
+      }
+    }
+    
+    // 3. Try to get from article title or main content header
+    if (!pageContext) {
+      const articleTitle = document.querySelector('article h1, main h1, .content h1');
+      if (articleTitle && articleTitle.textContent) {
+        pageContext = articleTitle.textContent.trim();
+      }
+    }
+    
+    // 4. Try to get from URL path for module detection
+    if (!pageContext) {
+      const path = window.location.pathname;
+      const moduleMatch = path.match(/\/module-(\d+)(?:\.(\d+))?/);
+      if (moduleMatch) {
+        const moduleNum = moduleMatch[1];
+        const sectionNum = moduleMatch[2];
+        pageContext = sectionNum ? `Module ${moduleNum}.${sectionNum}` : `Module ${moduleNum}`;
+      }
+    }
+    
+    // 5. Fallback to navigation breadcrumb or current page indicator
+    if (!pageContext) {
+      const navCurrent = document.querySelector('.nav-item.is-current a, .nav-link.is-current');
+      if (navCurrent && navCurrent.textContent) {
+        pageContext = navCurrent.textContent.trim();
+      }
+    }
+    
+    // Clean up common prefixes/suffixes
+    if (pageContext) {
+      pageContext = pageContext
+        .replace(/^(Introduction to|Overview of|Getting Started with)\s*/i, '')
+        .replace(/\s*- Platform Engineering Workshop$/, '')
+        .trim();
+    }
+    
+    // Combine title and description if we have both
+    if (pageContext && contextDescription) {
+      // Limit description length to keep context manageable
+      if (contextDescription.length > 200) {
+        contextDescription = contextDescription.substring(0, 197) + '...';
+      }
+      return `${pageContext}: ${contextDescription}`;
+    }
+    
+    return pageContext || null;
+  }
+
+  async sendMessage() {
+    const input = document.getElementById('chatbot-input');
+    const message = input.value.trim();
+    
+    if (!message) return;
+
+    // Get current page context for focused assistance
+    const pageContext = this.getCurrentPageContext();
+    console.log('Page context for chat:', pageContext);
+
+    // Add user message to chat
+    this.addMessage(message, 'user');
+    input.value = '';
+    document.getElementById('chatbot-send').disabled = true;
+
+    // Show thinking indicator with page context if available
+    if (pageContext) {
+      this.setStatus(`AI is analyzing ${pageContext}...`, 'thinking');
+    } else {
+      this.setStatus('AI is thinking...', 'thinking');
+    }
+
+    try {
+      await this.streamChatResponse(message, pageContext);
+      this.setStatus('');
+    } catch (error) {
+      console.error('Chat stream failed:', error);
+      this.addMessage('Sorry, I encountered an error: ' + error.message, 'bot', 'error');
+      this.setStatus('Error: ' + error.message, 'error');
+    }
+
+    document.getElementById('chatbot-send').disabled = false;
+  }
+
+  async streamChatResponse(message, pageContext = null) {
+    // Create a message element for streaming response
+    const messageId = 'msg-' + Date.now();
+    const messageDiv = document.createElement('div');
+    messageDiv.id = messageId;
+    messageDiv.className = 'message bot-message';
+    messageDiv.innerHTML = '<div class="message-content"><span class="typing-indicator">●</span></div>';
+    
+    const messagesContainer = document.getElementById('chatbot-messages');
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    let hasStarted = false;
+
+    try {
+      // Use Server-Sent Events for streaming
+      const eventSource = new EventSource('/api/chat/stream?' + new URLSearchParams({
+        message: message,
+        include_mcp: this.config.mcpEnabled ? 'true' : 'false'
+      }));
+
+      let fullResponse = '';
+
+      eventSource.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          
+          if (data.status === 'starting') {
+            // Remove typing indicator and start showing response
+            const contentDiv = messageDiv.querySelector('.message-content');
+            contentDiv.innerHTML = '';
+            hasStarted = true;
+          } else if (data.status === 'complete') {
+            eventSource.close();
+          } else if (data.content) {
+            // Append new content
+            fullResponse += data.content;
+            const contentDiv = messageDiv.querySelector('.message-content');
+            contentDiv.textContent = fullResponse; // Show raw text during streaming
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+          } else if (data.error) {
+            throw new Error(data.error);
+          }
+        } catch (parseError) {
+          console.error('Error parsing SSE data:', parseError);
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('SSE error:', error);
+        eventSource.close();
+        
+        if (!hasStarted) {
+          messageDiv.remove();
+          throw new Error('Failed to connect to chat service');
+        }
+      };
+
+      // Handle POST request for SSE (since EventSource only supports GET)
+      eventSource.close();
+      
+      // Use fetch with streaming instead
+      const response = await fetch('/api/chat/stream', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          message: message,
+          conversation_history: this.chatHistory,
+          include_mcp: this.config.mcpEnabled,
+          page_context: pageContext
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              
+              if (data.status === 'starting') {
+                const contentDiv = messageDiv.querySelector('.message-content');
+                contentDiv.innerHTML = '';
+                hasStarted = true;
+              } else if (data.content) {
+                fullResponse += data.content;
+                const contentDiv = messageDiv.querySelector('.message-content');
+                contentDiv.textContent = fullResponse; // Show raw text during streaming
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+              } else if (data.error) {
+                throw new Error(data.error);
+              }
+            } catch (parseError) {
+              // Ignore parsing errors for partial data
+            }
+          }
+        }
+      }
+      
+      // Format the complete response as AsciiDoc after streaming is done
+      if (fullResponse && fullResponse.trim()) {
+        const contentDiv = messageDiv.querySelector('.message-content');
+        contentDiv.innerHTML = this.formatMessage(fullResponse.trim());
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      }
+      
+      // Add the complete assistant response to conversation history
+      if (fullResponse && fullResponse.trim()) {
+        this.chatHistory.push({
+          role: 'assistant',
+          content: fullResponse.trim()
+        });
+        
+        // Keep history manageable (last 20 messages)
+        if (this.chatHistory.length > 20) {
+          this.chatHistory = this.chatHistory.slice(-20);
+        }
+      }
+
+    } catch (error) {
+      console.error('Streaming error:', error);
+      if (!hasStarted) {
+        messageDiv.remove();
+      }
+      throw error;
+    }
+  }
+
+  // Legacy method - no longer used since frontend uses streaming via backend
+  async callAI(userMessage) {
+    throw new Error('Direct AI calls from frontend are deprecated. Use streamChatResponse instead.');
+  }
+
+  buildSystemPrompt(userMessage = '') {
+    // System prompt is now handled entirely by the backend
+    // This method is kept for compatibility but is no longer used
+    // The backend builds the system prompt from external configuration
+    return '';
+  }
+
+  // Helper method to find relevant workshop content based on user query
+  findRelevantContent(query, maxTokens = 6000) {
+    if (!this.workshopContent) {
+      return 'Workshop content is loading...';
+    }
+    
+    const queryLower = query.toLowerCase();
+    const relevantSections = [];
+    let tokenCount = 0;
+    
+    // Keywords that indicate different topics
+    const topicKeywords = {
+      'authentication': ['auth', 'login', 'oauth', 'keycloak', 'sso', 'signin', 'oidc'],
+      'deployment': ['deploy', 'pod', 'container', 'kubernetes', 'openshift', 'helm'],
+      'development': ['code', 'develop', 'build', 'ci', 'pipeline', 'git', 'template'],
+      'configuration': ['config', 'setup', 'install', 'configure', 'settings'],
+      'monitoring': ['monitor', 'observ', 'metrics', 'logs', 'alert'],
+      'networking': ['network', 'ingress', 'route', 'service', 'endpoint'],
+      'storage': ['storage', 'volume', 'persistent', 'database', 'data'],
+      'security': ['security', 'rbac', 'permission', 'access', 'policy'],
+      'backstage': ['backstage', 'rhdh', 'developer hub', 'catalog', 'component'],
+      'gitops': ['gitops', 'argo', 'argocd', 'sync', 'application'],
+      'scaffolding': ['scaffold', 'template', 'create', 'generate', 'software template']
+    };
+    
+    // Find which topics are relevant to the query
+    const relevantTopics = [];
+    for (const [topic, keywords] of Object.entries(topicKeywords)) {
+      if (keywords.some(keyword => queryLower.includes(keyword))) {
+        relevantTopics.push(topic);
+      }
+    }
+    
+    // Convert workshop content to string if it's an object
+    const contentStr = typeof this.workshopContent === 'string' ? 
+      this.workshopContent : 
+      JSON.stringify(this.workshopContent, null, 2);
+    
+    // Split content into sections (by modules or major headings)
+    const sections = contentStr.split(/(?=##?\s+Module|##?\s+Chapter|##?\s+Section)/i);
+    
+    // Score and filter sections
+    const scoredSections = sections.map(section => {
+      const sectionLower = section.toLowerCase();
+      let score = 0;
+      
+      // Direct keyword matches from query
+      const words = queryLower.split(' ').filter(w => w.length > 2);
+      words.forEach(word => {
+        const matches = (sectionLower.match(new RegExp(word, 'gi')) || []).length;
+        score += matches * 3;
+      });
+      
+      // Topic relevance
+      relevantTopics.forEach(topic => {
+        topicKeywords[topic].forEach(keyword => {
+          if (sectionLower.includes(keyword)) {
+            score += 2;
+          }
+        });
+      });
+      
+      // Boost current page content
+      const currentPage = document.querySelector('h1')?.textContent || '';
+      if (currentPage && sectionLower.includes(currentPage.toLowerCase())) {
+        score += 5;
+      }
+      
+      return { section, score };
+    }).filter(item => item.score > 0)
+      .sort((a, b) => b.score - a.score);
+    
+    // Add sections until we hit the token limit (rough estimate: 4 chars = 1 token)
+    for (const item of scoredSections) {
+      const sectionTokens = Math.ceil(item.section.length / 4);
+      if (tokenCount + sectionTokens > maxTokens) {
+        break;
+      }
+      relevantSections.push(item.section);
+      tokenCount += sectionTokens;
+    }
+    
+    // If no relevant sections found or query is empty, include a summary
+    if (relevantSections.length === 0 || !query.trim()) {
+      const summary = contentStr.substring(0, Math.min(3000, contentStr.length));
+      return 'Workshop Summary (first section):\n' + summary + '\n\n(Note: This is a partial view. Ask specific questions for more targeted help.)';
+    }
+    
+    return relevantSections.join('\n\n---\n\n');
+  }
+
+  addMessage(content, sender, type = 'normal') {
+    const messagesContainer = document.getElementById('chatbot-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'message ' + sender + '-message' + (type === 'error' ? ' error-message' : '');
+    
+    messageDiv.innerHTML = 
+      '<div class="message-content">' + this.formatMessage(content) + '</div>' +
+      '<div class="message-time">' + new Date().toLocaleTimeString() + '</div>';
+    
+    messagesContainer.appendChild(messageDiv);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Add to conversation history (only for user messages, since assistant responses are handled in streaming)
+    if (type !== 'error' && sender === 'user') {
+      this.chatHistory.push({
+        role: 'user',
+        content: content
+      });
+      
+      // Keep history manageable (last 20 messages)
+      if (this.chatHistory.length > 20) {
+        this.chatHistory = this.chatHistory.slice(-20);
+      }
+    }
+  }
+
+  formatMessage(content) {
+    // Enhanced AsciiDoc + Markdown formatting
+    let formatted = content;
+    
+    // AsciiDoc section headers
+    formatted = formatted.replace(/^===== (.+?)$/gm, '<h6>$1</h6>');
+    formatted = formatted.replace(/^==== (.+?)$/gm, '<h5>$1</h5>');
+    formatted = formatted.replace(/^=== (.+?)$/gm, '<h4>$1</h4>');
+    formatted = formatted.replace(/^== (.+?)$/gm, '<h3>$1</h3>');
+    formatted = formatted.replace(/^= (.+?)$/gm, '<h2>$1</h2>');
+    
+    // AsciiDoc admonitions
+    formatted = formatted.replace(/^\[NOTE\]\s*====\s*([\s\S]*?)\s*====/gm, '<div class="admonition note"><div class="title">NOTE</div><div class="content">$1</div></div>');
+    formatted = formatted.replace(/^\[TIP\]\s*====\s*([\s\S]*?)\s*====/gm, '<div class="admonition tip"><div class="title">TIP</div><div class="content">$1</div></div>');
+    formatted = formatted.replace(/^\[IMPORTANT\]\s*====\s*([\s\S]*?)\s*====/gm, '<div class="admonition important"><div class="title">IMPORTANT</div><div class="content">$1</div></div>');
+    formatted = formatted.replace(/^\[WARNING\]\s*====\s*([\s\S]*?)\s*====/gm, '<div class="admonition warning"><div class="title">WARNING</div><div class="content">$1</div></div>');
+    
+    // AsciiDoc code blocks with syntax highlighting
+    formatted = formatted.replace(/^\[source,(\w+)\]\s*----\s*([\s\S]*?)\s*----/gm, '<pre class="code-block"><code class="language-$1">$2</code></pre>');
+    formatted = formatted.replace(/^----\s*([\s\S]*?)\s*----/gm, '<pre class="code-block"><code>$1</code></pre>');
+    
+    // AsciiDoc numbered lists
+    formatted = formatted.replace(/^(\d+)\.\s+(.+?)$/gm, '<li class="numbered-list">$2</li>');
+    
+    // AsciiDoc bullet lists
+    formatted = formatted.replace(/^\*\s+(.+?)$/gm, '<li class="bullet-list">$1</li>');
+    
+    // AsciiDoc links
+    formatted = formatted.replace(/link:([^\[]+)\[([^\]]*)\]/g, '<a href="$1" target="_blank">$2</a>');
+    
+    // Basic markdown-like formatting (backwards compatibility)
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    formatted = formatted.replace(/`(.*?)`/g, '<code class="inline-code">$1</code>');
+    
+    // Handle line breaks
+    formatted = formatted.replace(/\n\n/g, '</p><p>');
+    formatted = formatted.replace(/\n/g, '<br>');
+    
+    // Wrap in paragraph tags if not already formatted
+    if (!formatted.includes('<h') && !formatted.includes('<div') && !formatted.includes('<pre') && !formatted.includes('<li')) {
+      formatted = '<p>' + formatted + '</p>';
+    }
+    
+    return formatted;
+  }
+
+  // MCP Client Methods
+  async callMCPTool(toolName, parameters = {}) {
+    if (!this.config.mcpEnabled || !this.config.mcpEndpoint) {
+      throw new Error('MCP server not configured. Please enable and configure MCP in settings.');
+    }
+
+    // Handle different URL formats
+    let mcpUrl = this.config.mcpEndpoint;
+    if (mcpUrl.startsWith('/')) {
+      // Relative URL - use current domain (includes /mcp-proxy)
+      mcpUrl = window.location.origin + mcpUrl;
+    } else if (mcpUrl.startsWith('http://mcp-server:8080')) {
+      // Internal service URL - convert to external route
+      mcpUrl = mcpUrl.replace('http://mcp-server:8080', 'https://mcp-server-workshop-mcp.apps.cluster-n2sn6.n2sn6.sandbox1224.opentlc.com');
+    } else if (!mcpUrl.includes('/mcp') && !mcpUrl.includes('mcp-proxy')) {
+      // Add /mcp path if not present and not using proxy
+      mcpUrl = mcpUrl.endsWith('/') ? mcpUrl + 'mcp' : mcpUrl + '/mcp';
+    }
+
+    console.log('Calling MCP tool:', { toolName, parameters, endpoint: mcpUrl });
+
+    try {
+      const response = await fetch(mcpUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: Date.now(),
+          method: 'tools/call',
+          params: {
+            name: toolName,
+            arguments: parameters
+          }
+        })
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('MCP API Error Response:', errorText);
+        throw new Error('MCP call failed: ' + response.status + ' ' + response.statusText + '. Details: ' + errorText);
+      }
+
+      const result = await response.json();
+      console.log('MCP response:', result);
+
+      if (result.error) {
+        throw new Error('MCP Error: ' + result.error.message);
+      }
+
+      return result.result;
+    } catch (error) {
+      console.error('MCP call failed:', error);
+      throw error;
+    }
+  }
+
+  async getMCPTools() {
+    if (!this.config.mcpEnabled || !this.config.mcpEndpoint) {
+      return [];
+    }
+
+    // Handle different URL formats
+    let mcpUrl = this.config.mcpEndpoint;
+    if (mcpUrl.startsWith('/')) {
+      // Relative URL - use current domain (includes /mcp-proxy)
+      mcpUrl = window.location.origin + mcpUrl;
+    } else if (mcpUrl.startsWith('http://mcp-server:8080')) {
+      // Internal service URL - convert to external route
+      mcpUrl = mcpUrl.replace('http://mcp-server:8080', 'https://mcp-server-workshop-mcp.apps.cluster-n2sn6.n2sn6.sandbox1224.opentlc.com');
+    } else if (!mcpUrl.includes('/mcp') && !mcpUrl.includes('mcp-proxy')) {
+      // Add /mcp path if not present and not using proxy
+      mcpUrl = mcpUrl.endsWith('/') ? mcpUrl + 'mcp' : mcpUrl + '/mcp';
+    }
+
+    try {
+      const response = await fetch(mcpUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          jsonrpc: '2.0',
+          id: Date.now(),
+          method: 'tools/list'
+        })
+      });
+
+      if (!response.ok) {
+        console.warn('Failed to get MCP tools:', response.status);
+        return [];
+      }
+
+      const result = await response.json();
+      return result.result?.tools || [];
+    } catch (error) {
+      console.warn('Failed to get MCP tools:', error);
+      return [];
+    }
+  }
+
+  // Legacy method - Enhanced AI calls with MCP are deprecated
+  async enhancedAICall(userMessage) {
+    throw new Error('Enhanced AI calls from frontend are deprecated. MCP integration is now handled by the backend.');
+  }
+
+  setStatus(message, type = '') {
+    const statusEl = document.getElementById('chatbot-status');
+    statusEl.textContent = message;
+    statusEl.className = 'chatbot-status ' + type;
+  }
+}
+
+// Initialize chatbot when DOM is ready
+console.log('Chatbot script loaded, document state:', document.readyState);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, initializing chatbot...');
+    new WorkshopChatbot();
+  });
+} else {
+  console.log('DOM already ready, initializing chatbot...');
+  new WorkshopChatbot();
+}
+</script>
 
 ++++
