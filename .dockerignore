@@ -1,0 +1,41 @@
+# Ignore version control
+.git
+.gitignore
+
+# Ignore environment and secrets
+.env
+.env.local
+.env.*.local
+.env.yaml
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore node_modules and dependencies
+node_modules/
+
+# Ignore build artifacts that shouldn't be in Docker context
+.cache/
+
+# Ignore documentation
+README.md
+DEPLOYMENT_GUIDE.md
+*.md
+
+# Ignore Python virtual environments and build artifacts
+backend/venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

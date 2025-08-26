@@ -1,0 +1,90 @@
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mcp-server
+  labels:
+    app.kubernetes.io/name: workshop-mcp
+    app.kubernetes.io/component: mcp-server
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: mcp-server-reader
+  labels:
+    app.kubernetes.io/name: workshop-mcp
+    app.kubernetes.io/component: rbac
+rules:
+# Core resources
+- apiGroups: [""]
+  resources:
+    - pods
+    - services
+    - endpoints
+    - events
+    - namespaces
+    - nodes
+    - persistentvolumes
+    - persistentvolumeclaims
+    - configmaps
+    - secrets
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Apps resources
+- apiGroups: ["apps"]
+  resources:
+    - deployments
+    - replicasets
+    - statefulsets
+    - daemonsets
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# Networking resources
+- apiGroups: ["networking.k8s.io"]
+  resources:
+    - ingresses
+    - networkpolicies
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# OpenShift specific resources
+- apiGroups: ["route.openshift.io"]
+  resources:
+    - routes
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+- apiGroups: ["project.openshift.io"]
+  resources:
+    - projects
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+
+# For workshop demos - allow pod exec and logs
+- apiGroups: [""]
+  resources:
+    - pods/exec
+    - pods/log
+  verbs: ["create", "get"]
+
+# Metrics server access
+- apiGroups: ["metrics.k8s.io"]
+  resources:
+    - pods
+    - nodes
+  verbs: ["get", "list", "create", "update", "patch", "delete"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: mcp-server-reader-binding
+x  labels:
+    app.kubernetes.io/name: workshop-mcp
+    app.kubernetes.io/component: rbac
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mcp-server-reader
+subjects:
+- kind: ServiceAccount
+  name: mcp-server
+  namespace: NAMESPACE_PLACEHOLDER

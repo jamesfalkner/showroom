@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workshop-backend
+  labels:
+    app.kubernetes.io/name: workshop-backend
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/version: "v1.0.0"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: workshop-backend
+      app.kubernetes.io/component: backend
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: workshop-backend
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/version: "v1.0.0"
+    spec:
+      containers:
+      - name: workshop-backend
+        # Will be updated to use the built image
+        image: image-registry.openshift-image-registry.svc:5000/NAMESPACE_PLACEHOLDER/workshop-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        env:
+        # Load configuration from ConfigMap
+        - name: LLM_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: LLM_API_URL
+        - name: LLM_MODEL
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: LLM_MODEL
+        - name: MAX_TOKENS
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: MAX_TOKENS
+        - name: STATIC_DIR
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: STATIC_DIR
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: LOG_LEVEL
+        - name: SYSTEM_PROMPT_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: SYSTEM_PROMPT_CONFIG
+        - name: MCP_CONFIG
+          valueFrom:
+            configMapKeyRef:
+              name: workshop-backend-config
+              key: MCP_CONFIG
+        # Load secrets
+        - name: LLM_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: workshop-backend-secrets
+              key: llm-api-key
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1500m"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: vector-db-storage
+          mountPath: /app/vector_db
+      volumes:
+      - name: vector-db-storage
+        emptyDir:
+          sizeLimit: 2Gi
+      restartPolicy: Always

@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@zereight/mcp-gitlab": "^2.0.2",
+    "kubernetes-mcp-server": "^0.0.49"
+  }
+}

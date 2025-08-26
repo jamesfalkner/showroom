@@ -1,0 +1,111 @@
+# Platform Engineering Workshop — Namespace & Argo CD Control Map
+
+Here's a detailed summary of all GitLab file edits that users are instructed to perform throughout the Platform Engineering Workshop:
+
+Primary Configuration File: values.yaml
+
+Path: rhdh/developer-hub-config/values.yaml
+
+This is the main RHDH configuration file that gets edited 8 times across different modules:
+
+1. Module 2.3 - Change application title (verify GitOps working)
+2. Module 2.4 - Enable Keycloak integration for user/group discovery
+3. Module 2.5 - Replace guest auth with OIDC authentication
+4. Module 2.6 - Enable GitLab discovery and TechDocs plugin
+5. Module 3.7 - Enable RBAC (Role-Based Access Control)
+6. Module 4.2 - Import Software Templates and enable component plugins
+7. Module 7.2 - Enable adoption insights monitoring plugin
+8. Module 7.3 - Enable monitoring configuration
+9. Module 7.4 - Enable orchestrator and notifications plugins
+
+Component Configuration Files
+
+Path: dev1/my-quarkus-app/catalog-info.yaml (Module 3.5)
+- Purpose: Enable Argo CD integration for existing component
+- User: Developer (dev1)
+
+Path: rhdh/template-quarkus-simple/skeleton/catalog-info.yaml (Module 3.6)
+- Purpose: Update template so new components get Argo CD integration automatically
+- User: Platform Engineer (pe1)
+
+Application Source Code
+
+Path: parasol/parasol-store/src/main/java/org/parasol/retail/store/catalog/rest/CatalogResource.java (Module 4.5)
+- Purpose: Add new REST API endpoint feature to demonstrate development workflow
+- User: Developer (dev1)
+
+The workshop demonstrates how Platform Engineers progressively build and configure an Internal Developer Platform through systematic GitLab-based configuration management, while showing developers how they interact with and extend the platform.
+
+The workshop treats RHDH as a platform product managed through GitOps rather than a manually deployed application.
+
+1. Dual GitOps Architecture
+
+Workshop Approach:
+- Two-tier GitOps system with separate ArgoCD instances:
+- openshift-gitops (Platform GitOps): Manages RHDH platform itself
+- rhdh-gitops (Application GitOps): Manages developer applications
+- Nested ArgoCD Applications: RHDH deployed through backstage-bootstrap → backstage application chain
+
+Standard Approach:
+- Direct Helm chart or Operator installation
+- Manual configuration management
+
+2. Configuration as Code
+
+Workshop Approach:
+- GitLab as Single Source of Truth: All configuration in rhdh/developer-hub-config/values.yaml
+- Systematic Configuration Evolution: 8+ configuration changes across modules teaching progressive platform building
+- Git-based Change Management: Every change committed to Git with descriptive messages
+
+Standard Approach:
+- Direct editing of cluster ConfigMaps/Secrets
+- Ad-hoc configuration changes
+- Limited change tracking
+
+3. Change Workflow
+
+Workshop Pattern:
+Edit GitLab file → Commit changes → ArgoCD detects → Automatic sync → Deployment
+
+Standard Pattern:
+Edit local values → helm upgrade → Manual deployment
+
+4. Educational Design
+
+Workshop Benefits:
+- Production-Grade Practices: Teaches enterprise GitOps methodologies
+- Platform Engineering Mindset: Demonstrates infrastructure as a product
+- Role Separation: Platform Engineers manage GitLab configs, Developers work with components
+- Scalability Patterns: Shows how this scales across teams and environments
+
+5. Key Workshop-Specific Features
+
+Pre-configured Infrastructure:
+- GitLab repositories with templated configurations
+- Pre-created secrets and RBAC
+- Comment markers (--- APP TITLE ---) for guided editing
+- Automatic ArgoCD application creation
+
+Educational Workflow:
+- Step-by-step configuration building (authentication → plugins → monitoring)
+- Verification through ArgoCD UI after each change
+- Integration with other platform components (Keycloak, monitoring, etc.)
+
+Developer Experience:
+- Self-service component creation through GitOps-integrated templates
+- Automatic ArgoCD application creation for new components
+- Consistent Git → Deploy pattern for all changes
+
+Why This Matters
+
+This approach transforms RHDH from a simple application into a comprehensive platform engineering education, teaching:
+
+1. Infrastructure as Code principles
+2. GitOps operational patterns
+3. Platform team workflows
+4. Production-grade deployment practices
+5. Scalable configuration management
+
+The workshop doesn't just show how to install RHDH—it demonstrates how platform teams should manage and operate internal developer platforms in enterprise
+environments, making it far more valuable than a standard installation tutorial.
+

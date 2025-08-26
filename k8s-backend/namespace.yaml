@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: workshop-backend
+  labels:
+    name: workshop-backend
+    app.kubernetes.io/name: workshop-backend
+    app.kubernetes.io/component: namespace

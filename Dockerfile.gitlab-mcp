@@ -1,0 +1,18 @@
+# Dockerfile for GitLab MCP Server
+# Uses the official gitlab-mcp-server npm package
+
+FROM registry.access.redhat.com/ubi10/nodejs-22-minimal:latest
+
+# Set working directory to user home (standard for UBI Node.js images)
+WORKDIR $HOME
+
+# Set environment variables
+ENV MCP_SERVER_HOST=0.0.0.0
+ENV MCP_SERVER_PORT=8080
+
+EXPOSE 8080
+
+RUN npm install @zereight/mcp-gitlab@1.0.77
+
+# Run the mcp-gitlab using the installed binary
+CMD ["node_modules/.bin/mcp-gitlab", "--port", "8080"]

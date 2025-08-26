@@ -1,0 +1,25 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: mcp-server
+  labels:
+    app.kubernetes.io/name: workshop-mcp
+    app.kubernetes.io/component: mcp-server
+  annotations:
+    # Enable CORS for browser-based chatbot access
+    haproxy.router.openshift.io/response-headers: |
+      Access-Control-Allow-Origin: *
+      Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS
+      Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With
+      Access-Control-Max-Age: 86400
+spec:
+  to:
+    kind: Service
+    name: mcp-server
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
